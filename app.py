@@ -6,7 +6,7 @@ import numpy as np
 
 app = Flask(__name__)
 
-model = tf.keras.models.load_model("thyroid_cancer_detection.keras")
+model = tf.keras.models.load_model("thyroid_cancer_detection.keras",compile=False)
 
 class_names = ['2', '3', '4A', '4B', '4C', '5']
 
