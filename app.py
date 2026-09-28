@@ -26,22 +26,28 @@ def home():
     prediction = None
 
     if request.method == "POST":
-        file = request.files["image"]
+        file = request.files.get("image")
 
-        if file:
+        if file and file.filename:
             img = Image.open(file).convert("RGB")
             img = img.resize((128, 128))
 
-            img_array = np.array(img) / 255.0
+            img_array = np.array(img, dtype=np.float32) / 255.0
             img_array = np.expand_dims(img_array, axis=0)
 
-            result = model.predict(img_array, verbose=0)
-            predicted_class = np.argmax(result[0])
+            # Direct TensorFlow inference
+            result = model(img_array, training=False).numpy()
 
+            predicted_class = np.argmax(result[0])
             prediction = class_names[predicted_class]
 
     return render_template("index.html", prediction=prediction)
 
 
 if __name__ == "__main__":
-    app.run(debug=False, use_reloader=False)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 10000)),
+        debug=False,
+        use_reloader=False
+    )
