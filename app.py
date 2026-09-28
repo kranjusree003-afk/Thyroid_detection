@@ -18,7 +18,14 @@ model = tf.keras.models.load_model(
     compile=False
 )
 
-class_names = ['2', '3', '4A', '4B', '4C', '5']
+class_names = [
+    "Benign / Non-Cancerous",
+    "Probably Benign",
+    "Mildly Suspicious Nodule",
+    "Moderately Suspicious Nodule",
+    "Highly Suspicious Nodule",
+    "Very Highly Suspicious for Malignancy"
+]
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -35,7 +42,6 @@ def home():
             img_array = np.array(img, dtype=np.float32) / 255.0
             img_array = np.expand_dims(img_array, axis=0)
 
-            # Direct TensorFlow inference
             result = model(img_array, training=False).numpy()
 
             predicted_class = np.argmax(result[0])
