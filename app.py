@@ -12,7 +12,10 @@ tf.config.threading.set_inter_op_parallelism_threads(1)
 
 app = Flask(__name__)
 
-model = tf.keras.models.load_model("thyroid_cancer_detection.keras",compile=False)
+model = tf.keras.models.load_model(
+    "thyroid_cancer_detection.keras",
+    compile=False
+)
 
 class_names = ['2', '3', '4A', '4B', '4C', '5']
 
