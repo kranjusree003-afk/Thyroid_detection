@@ -18,10 +18,6 @@ model = tf.keras.models.load_model(
     compile=False
 )
 
-# Warm up the model once when the server starts
-dummy_input = np.zeros((1, 128, 128, 3), dtype=np.float32)
-model.predict(dummy_input, verbose=0)
-
 class_names = ['2', '3', '4A', '4B', '4C', '5']
 
 
