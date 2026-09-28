@@ -1,4 +1,5 @@
 import os
+
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
@@ -17,7 +18,12 @@ model = tf.keras.models.load_model(
     compile=False
 )
 
+# Warm up the model once when the server starts
+dummy_input = np.zeros((1, 128, 128, 3), dtype=np.float32)
+model.predict(dummy_input, verbose=0)
+
 class_names = ['2', '3', '4A', '4B', '4C', '5']
+
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -39,6 +45,7 @@ def home():
             prediction = class_names[predicted_class]
 
     return render_template("index.html", prediction=prediction)
+
 
 if __name__ == "__main__":
     app.run(debug=False, use_reloader=False)
